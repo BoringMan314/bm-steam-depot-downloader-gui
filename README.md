@@ -4,6 +4,8 @@
 
 → <a href="https://www.youtube.com/watch?v=H2COwT5OUOo" target="_blank"><b>Tutorial</b></a> ~ 
 <a href="https://depotdownloader.aphex.cc/" target="_blank"><b>Website</b></a> ~ 
+<a href="https://depotdownloader.com/safety/" target="_blank"><b>Safety</b></a> ~ 
+<a href="https://depotdownloader.com/how-it-works/" target="_blank"><b>How it works</b></a> ~ 
 <a href="https://www.youtube.com/watch?v=ogiDAuH3VdY" target="_blank"><b>Downgrade Subnautica</b></a> ←
 </h4>
 
@@ -49,7 +51,7 @@ Download the [latest Linux release](https://github.com/mmvanheusden/SteamDepotDo
 
 ## Credits
 This software makes use of the following projects:
-- [**DepotDownloader**](https://github.com/SteamRE/DepotDownloader)
+- [**DepotDownloader**](https://depotdownloader.com/) :heart:
 - [Tauri](https://tauri.app)
 - [Preact](https://preactjs.com)
 - [Hubut Sans](https://github.com/github/hubot-sans) under [license](https://github.com/github/hubot-sans/blob/05d5ea150c20e6434485db8ffd2277ed18a9e911/LICENSE) 
