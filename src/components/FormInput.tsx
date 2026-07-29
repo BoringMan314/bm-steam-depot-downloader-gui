@@ -1,7 +1,7 @@
-import { Icon } from "@iconify-icon/react";
-import { open as openDialog } from "@tauri-apps/plugin-dialog";
-import { openPath } from "@tauri-apps/plugin-opener";
-import { useState } from "preact/hooks";
+import {Icon} from "@iconify-icon/react";
+import {open as openDialog} from "@tauri-apps/plugin-dialog";
+import {openPath} from "@tauri-apps/plugin-opener";
+import {useState} from "preact/hooks";
 import "../css/App.css";
 
 export type StringUseState = ReturnType<typeof useState<string>>;
@@ -50,7 +50,7 @@ export function TextInput({ id, label, placeholder, valueState, initialValue, re
 	return (
 		<>
 			{label && <Label forId={id} text={label} required={required} />}
-			<input disabled={disabled} id={id} required={required} value={value} onInput={handleInput} placeholder={placeholder} type={password ? "password" : "text"} class={`block py-2 px-3 w-full text-sm placeholder-gray-400 text-white rounded-lg border border-gray-600 transition duration-300 focus:border-blue-500 disabled:placeholder-white disabled:bg-gray-700 bg-[#161b22] focus:shadow-[0px_0px_29px_1px_rgba(59,130,246,0.5)] ${className} `} />
+			<input disabled={disabled} id={id} required={required} value={value} onInput={handleInput} placeholder={placeholder} type={password ? "password" : "text"} class={`block py-2 px-3 w-full text-sm placeholder-gray-400 text-white rounded-lg border border-gray-600 transition duration-300 focus:border-blue-500 disabled:placeholder-white disabled:bg-gray-700 bg-[#161b22] focus:shadow-[0px_0px_15px_1px_rgba(59,130,246,0.5)] ${className} `} />
 		</>
 	);
 }
@@ -88,7 +88,7 @@ export function NumberInput({ id, label, placeholder, valueState, initialValue, 
 	return (
 		<>
 			{label && <Label forId={id} text={label} required={required} />}
-			<input disabled={disabled} id={id} required={required} value={value} onInput={handleInput} min={min ?? 1} max={max} step={step} placeholder={placeholder} type="number" pattern="[0-9]" class="block py-2 px-3 w-full text-sm placeholder-gray-400 text-white rounded-lg border border-gray-600 transition duration-300 focus:border-blue-500 disabled:placeholder-white disabled:bg-gray-700 bg-[#161b22] focus:shadow-[0px_0px_29px_1px_rgba(59,130,246,0.5)]" />
+			<input disabled={disabled} id={id} required={required} value={value} onInput={handleInput} min={min ?? 1} max={max} step={step} placeholder={placeholder} type="number" pattern="[0-9]" class="block py-2 px-3 w-full text-sm placeholder-gray-400 text-white rounded-lg border border-gray-600 transition duration-300 focus:border-blue-500 disabled:placeholder-white disabled:bg-gray-700 bg-[#161b22] focus:shadow-[0px_0px_15px_1px_rgba(59,130,246,0.5)]" />
 		</>
 	);
 }

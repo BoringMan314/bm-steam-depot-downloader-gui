@@ -50,7 +50,7 @@ function App() {
 				<div hidden={!showSettings[0]}><Settings /></div>
 				<div hidden={showSettings[0]}>
 					<div class="flex justify-center w-full">
-						<div class="inline-flex absolute left-0 pt-1 pl-1">
+						<div class="inline-flex absolute left-0 pt-1 pl-3">
 							<ClipBoardParserButton disabled={downloading[0]!}/>
 						</div>
 						<div class="mb-1 text-4xl font-bold text-center font-['Hubot_Sans']">
