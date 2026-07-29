@@ -1,13 +1,13 @@
-import { getVersion } from "@tauri-apps/api/app";
-import { invoke } from "@tauri-apps/api/core";
-import { openUrl } from "@tauri-apps/plugin-opener";
-import { useState } from "preact/hooks";
-import { DownloaderForm } from "./components/DownloaderForm.tsx";
-import { DownloaderOutput } from "./components/DownloaderOutput.tsx";
-import { Settings } from "./components/Settings.tsx";
-import { AppContext, AppSettings } from "./context.ts";
+import {getVersion} from "@tauri-apps/api/app";
+import {invoke} from "@tauri-apps/api/core";
+import {openUrl} from "@tauri-apps/plugin-opener";
+import {useState} from "preact/hooks";
+import {DownloaderForm} from "./components/DownloaderForm.tsx";
+import {DownloaderOutput} from "./components/DownloaderOutput.tsx";
+import {Settings} from "./components/Settings.tsx";
+import {AppContext, AppSettings} from "./context.ts";
 import "./css/App.css";
-import { ClipBoardParserButton } from "./components/ClipboardParser.tsx";
+import {ClipBoardParserButton} from "./components/ClipboardParser.tsx";
 
 const appVersion = await getVersion();
 
@@ -91,5 +91,5 @@ export async function startDownload(options: {
 		steamDownload: {
 			...options
 		}
-	}); // First make backend download DepotDownloader
+	});
 }
