@@ -114,10 +114,23 @@ async fn download_depotdownloader(app: AppHandle) -> Result<(), String> {
 async fn cancel_download(state: State<'_, AppState>) -> Result<(), String> {
     let mut killer = state.killer.lock().await;
 
-    match killer.as_mut() {
-        Some(killer) => killer.kill().map_err(|err| err.to_string()),
-        None => Ok(()),
+    let Some(killer) = killer.as_mut() else {
+        return Ok(());
+    };
+
+    let result = killer.kill();
+
+    // portable-pty 0.9.0 inverts the TerminateProcess return value, so a kill that worked comes
+    // back as an error holding whatever `last_os_error` happened to be. Only the `command-exited`
+    // event can tell us whether the process is really gone.
+    if cfg!(windows) {
+        if let Err(err) = &result {
+            println!("DEBUG: ignoring kill result from portable-pty: {err}");
+        }
+        return Ok(());
     }
+
+    result.map_err(|err| err.to_string())
 }
 
 /// Checks internet connectivity using Google
