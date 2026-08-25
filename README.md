@@ -15,7 +15,7 @@
 <a href="https://github.com/mmvanheusden/SteamDepotDownloaderGUI/releases/latest"><img src="https://img.shields.io/github/downloads/mmvanheusden/SteamDepotDownloaderGUI/total?color=orange&label=downloads" alt="Download count badge"></a>
 
 
-<img src="screenshot/screenshot.png" alt="Steam downgrader interface" />
+<img src="screenshot/screenshot01.png" alt="Steam downgrader interface" />
 </div>
 
 ## Features

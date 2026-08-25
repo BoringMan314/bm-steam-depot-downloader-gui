@@ -2,6 +2,8 @@ import {readText} from "@tauri-apps/plugin-clipboard-manager";
 import {useContext, useState} from "preact/hooks";
 import {AppContext} from "../context";
 import {Icon} from "@iconify-icon/react";
+// Imported so Vite emits the asset and rewrites the URL; a plain relative src does not resolve in the bundle.
+import steamdbCopyFormat from "../assets/steamdb_copy.png";
 
 export function ClipBoardParserButton({disabled}: {disabled: boolean}) {
 	const context = useContext(AppContext);
@@ -33,7 +35,7 @@ export function ClipBoardParserButton({disabled}: {disabled: boolean}) {
 				<div class="flex flex-col py-1 px-2 mx-auto max-w-sm rounded-md -translate-y-8 bg-blue-900 border-gray-300 border">
 					<p class="mb-2 text-2xl font-semibold underline underline-offset-4">自動填入的運作方式</p>
 					<p>在 SteamDB 的 manifest 總覽頁面中，可以設定<i>複製格式</i>。</p>
-					<img src="../../assets/steamdb_copy.png" />
+					<img src={steamdbCopyFormat} alt="SteamDB 的複製格式選項" class="my-2 max-w-full rounded" />
 					<p>
 						只要把格式設為 DepotDownloader，本程式就能解析剪貼簿的內容，
 						並自動填入下方的表單欄位。

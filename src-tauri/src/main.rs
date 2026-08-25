@@ -7,7 +7,7 @@ mod terminal;
 
 use crate::depotdownloader::{get_depotdownloader_url, DEPOTDOWNLOADER_VERSION};
 use crate::terminal::{async_read_from_pty, async_resize_pty, async_write_to_pty};
-use portable_pty::{native_pty_system, PtyPair, PtySize};
+use portable_pty::{native_pty_system, ChildKiller, PtyPair, PtySize};
 use std::io::ErrorKind::AlreadyExists;
 use std::io::{BufReader, Read, Write};
 use std::path::{Path, PathBuf};
@@ -21,6 +21,8 @@ struct AppState {
     pty_pair: Arc<Mutex<PtyPair>>,
     writer: Arc<Mutex<Box<dyn Write + Send>>>,
     reader: Arc<Mutex<BufReader<Box<dyn Read + Send>>>>,
+    /// Kept separately from the child so it stays usable while a thread is blocked in `wait`.
+    killer: Arc<Mutex<Option<Box<dyn ChildKiller + Send + Sync>>>>,
 }
 
 #[tauri::command]
@@ -58,6 +60,8 @@ async fn start_download(steam_download: steam::SteamDownload, app: AppHandle, st
         .spawn_command(cmd)
         .map_err(|err| err.to_string())?;
 
+    *state.killer.lock().await = Some(child.clone_killer());
+
     thread::spawn(move || {
         let status = child.wait().unwrap();
         println!("Command exited with status: {status}");
@@ -69,28 +73,51 @@ async fn start_download(steam_download: steam::SteamDownload, app: AppHandle, st
 
 /// Downloads the DepotDownloader zip file from the internet based on the OS.
 #[tauri::command]
-async fn download_depotdownloader(app: AppHandle) {
+async fn download_depotdownloader(app: AppHandle) -> Result<(), String> {
     let working_dir: PathBuf = get_working_dir(&app);
     let url = get_depotdownloader_url();
 
     // Where we store the DepotDownloader zip.
     let zip_filename = format!("DepotDownloader-v{}-{}.zip", DEPOTDOWNLOADER_VERSION, env::consts::OS);
     let depotdownloader_zip = Path::join(&working_dir, Path::new(&zip_filename));
+    let binary = working_dir.join(depotdownloader::BINARY_NAME);
 
-
-    if let Err(e) = depotdownloader::download_file(url.as_str(), depotdownloader_zip.as_path()).await {
-        if e.kind() == AlreadyExists {
+    match depotdownloader::download_file(url.as_str(), depotdownloader_zip.as_path()).await {
+        Ok(()) => println!("Downloaded DepotDownloader for {} to {}", env::consts::OS, depotdownloader_zip.display()),
+        Err(e) if e.kind() == AlreadyExists => {
             println!("DepotDownloader already exists. Skipping download.");
-        } else {
-            println!("Failed to download DepotDownloader: {}", e);
+            if binary.is_file() {
+                return Ok(());
+            }
+            println!("Binary is missing, extracting the existing archive again.");
         }
-        return;
-    } else {
-        println!("Downloaded DepotDownloader for {} to {}", env::consts::OS, depotdownloader_zip.display());
+        Err(e) => return Err(format!("無法下載 DepotDownloader：{e}\n{url}")),
     }
 
-    depotdownloader::unzip(depotdownloader_zip.as_path(), &working_dir).unwrap();
+    if let Err(e) = depotdownloader::unzip(depotdownloader_zip.as_path(), &working_dir) {
+        // A damaged archive would otherwise fail forever, since it counts as already downloaded.
+        let _ = std::fs::remove_file(&depotdownloader_zip);
+        return Err(format!("無法解壓 DepotDownloader，已移除損壞的檔案，請再試一次：{e}"));
+    }
+
+    if !binary.is_file() {
+        return Err(format!("解壓完成但找不到 {}", binary.display()));
+    }
+
     println!("Succesfully extracted DepotDownloader zip.");
+    Ok(())
+}
+
+/// Terminates the running DepotDownloader process, if there is one.
+/// The `command-exited` event is emitted by the waiting thread once the process is gone.
+#[tauri::command]
+async fn cancel_download(state: State<'_, AppState>) -> Result<(), String> {
+    let mut killer = state.killer.lock().await;
+
+    match killer.as_mut() {
+        Some(killer) => killer.kill().map_err(|err| err.to_string()),
+        None => Ok(()),
+    }
 }
 
 /// Checks internet connectivity using Google
@@ -152,12 +179,14 @@ fn main() {
             pty_pair: Arc::new(Mutex::new(pty_pair)),
             writer: Arc::new(Mutex::new(writer)),
             reader: Arc::new(Mutex::new(BufReader::new(reader))),
+            killer: Arc::new(Mutex::new(None)),
         })
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .invoke_handler(tauri::generate_handler![
             start_download,
+            cancel_download,
             download_depotdownloader,
             internet_connection,
             async_write_to_pty,

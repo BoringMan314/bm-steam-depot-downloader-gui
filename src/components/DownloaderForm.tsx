@@ -1,4 +1,5 @@
 import { Icon } from "@iconify-icon/react";
+import { invoke } from "@tauri-apps/api/core";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useContext } from "preact/hooks";
 import { startDownload } from "../App";
@@ -65,29 +66,38 @@ function DownloadButton(
 			outputLocation: context.outputLocation![0],
 			outputDirectoryName: context.appSettings![0].outputDirectoryMode == "Custom" ? context.appSettings![0].outputDirectoryName : undefined,
 			noMobileAuth: context.appSettings![0].noMobileAuth,
-		}).catch((e) => console.error(e));
-		// setDownloading(false)
+		}).catch((e) => {
+			// Without this the button would stay stuck on "下載中…" forever.
+			console.error(e);
+			setDownloading(false);
+			alert(`無法開始下載：\n${String(e)}`);
+		});
+	};
+
+	const onCancel = () => {
+		invoke("cancel_download").catch((e) => {
+			console.error(e);
+			alert(`無法停止下載：\n${String(e)}`);
+		});
 	};
   
 	return (
-		<div class={`flex transition-transform ${disabled ? "cursor-not-allowed" :"active:scale-102"}`}>
-			<button disabled={disabled} onClick={onClick} type="submit" class="inline-flex justify-between items-center py-1 w-full text-2xl font-bold text-white bg-green-600 rounded-l-md border-2 border-black hover:bg-green-700 active:bg-green-800 disabled:bg-red-500/70">
-				{downloading
-					? <>
-						<div class="flex absolute ml-2">
-							<Icon icon="line-md:downloading-loop" width="35" height="35" />
-						</div>
-						<span class="w-full">下載中…</span>
-					</> :
-					<>
-						<div class="flex absolute ml-2">
-							<Icon icon="material-symbols:downloading-rounded" width="35" height="35" />
-						</div>
-						<span class="w-full">開始下載</span>
-					</>
-				}
-			</button>
-			<button disabled={disabled} onClick={() => context.showSettings![1](s => !s)} type="button" class="inline-flex justify-center items-center py-1 text-2xl font-bold text-center text-white bg-green-600 rounded-r-md border-2 border-l-0 border-black hover:bg-green-700 active:bg-green-800 group w-15 ring-l-gray-800 disabled:bg-red-500/70">
+		<div class="flex transition-transform active:scale-102">
+			{downloading
+				? <button onClick={onCancel} type="button" class="inline-flex justify-between items-center py-1 w-full text-2xl font-bold text-white bg-red-600 rounded-l-md border-2 border-black hover:bg-red-700 active:bg-red-800">
+					<div class="flex absolute ml-2">
+						<Icon icon="line-md:downloading-loop" width="35" height="35" />
+					</div>
+					<span class="w-full">停止下載</span>
+				</button>
+				: <button onClick={onClick} type="submit" class="inline-flex justify-between items-center py-1 w-full text-2xl font-bold text-white bg-green-600 rounded-l-md border-2 border-black hover:bg-green-700 active:bg-green-800">
+					<div class="flex absolute ml-2">
+						<Icon icon="material-symbols:downloading-rounded" width="35" height="35" />
+					</div>
+					<span class="w-full">開始下載</span>
+				</button>
+			}
+			<button disabled={disabled} onClick={() => context.showSettings![1](s => !s)} type="button" class="inline-flex justify-center items-center py-1 text-2xl font-bold text-center text-white bg-green-600 rounded-r-md border-2 border-l-0 border-black hover:bg-green-700 active:bg-green-800 disabled:cursor-not-allowed group w-15 ring-l-gray-800 disabled:bg-gray-700">
 				<Icon icon="heroicons:cog" width="30" height="30" class={`animate-spin [animation-play-state:paused] ${!disabled && "group-hover:[animation-play-state:running]"}`}/>
 			</button>
 		</div>

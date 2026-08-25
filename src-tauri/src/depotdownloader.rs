@@ -7,6 +7,8 @@ use std::{io::Write, path::Path};
 
 pub static DEPOTDOWNLOADER_VERSION: &str = "3.4.0";
 
+pub const BINARY_NAME: &str = if cfg!(windows) { "DepotDownloader.exe" } else { "DepotDownloader" };
+
 
 /**
 See: [`test_get_depotdownloader_url()`]
@@ -23,11 +25,17 @@ pub fn get_depotdownloader_url() -> String {
 }
 
 /// Downloads a file. The file will be saved to the [`filename`] provided.
+///
+/// The download goes to a temporary file that is only renamed into place once complete,
+/// so an interrupted attempt can never leave a truncated file that blocks later retries.
 pub async fn download_file(url: &str, filename: &Path) -> io::Result<()> {
-    if filename.exists() {
+    if filename.metadata().map(|m| m.len() > 0).unwrap_or(false) {
         println!("DEBUG: Not downloading. File already exists.");
         return Err(io::Error::from(AlreadyExists));
     }
+
+    // Drop leftovers from an interrupted attempt.
+    let _ = fs::remove_file(filename);
 
     // Create any missing directories.
     if let Some(p) = filename.parent() {
@@ -36,15 +44,21 @@ pub async fn download_file(url: &str, filename: &Path) -> io::Result<()> {
         }
     }
 
-    let mut file = File::create(filename)?;
-    let response = reqwest::get(url)
-        .await
-        .expect("Failed to contact internet.");
+    let response = reqwest::get(url).await.map_err(io::Error::other)?;
 
-    let content = response.bytes().await.unwrap();
+    if !response.status().is_success() {
+        return Err(io::Error::other(format!("{} returned HTTP {}", url, response.status())));
+    }
 
+    let content = response.bytes().await.map_err(io::Error::other)?;
+
+    let partial = filename.with_extension("part");
+    let mut file = File::create(&partial)?;
     file.write_all(&content)?;
-    Ok(())
+    file.sync_all()?;
+    drop(file);
+
+    fs::rename(&partial, filename)
 }
 
 /// Unzips DepotDownloader zips

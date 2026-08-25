@@ -114,6 +114,9 @@ if not exist "%DIST%" mkdir "%DIST%"
 del /q /f "%DIST%\*" 2>nul
 for /d %%D in ("%DIST%\*") do rd /s /q "%%D" 2>nul
 echo [INFO] Cleared %DIST%
+rem Tauri keeps older installers here, so collecting would pick up stale versions.
+if exist "%BUNDLE%\nsis" rd /s /q "%BUNDLE%\nsis" 2>nul
+if exist "%BUNDLE%\msi" rd /s /q "%BUNDLE%\msi" 2>nul
 exit /b 0
 
 :BuildTauri
