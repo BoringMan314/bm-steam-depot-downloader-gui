@@ -66,7 +66,7 @@ function App() {
 						</div>
 					</div>
 				</div>
-				<button tabIndex={-1} type="button" onClick={() => { openUrl(`https://github.com/mmvanheusden/SteamDepotDownloaderGUI/releases/v${appVersion}`).catch((e) => console.error(e)); }} class="absolute right-0 bottom-0 text-white hover:underline">{`v${appVersion}`}</button>
+				<button tabIndex={-1} type="button" onClick={() => { openUrl(`https://github.com/BoringMan314/bm-steam-depot-downloader-gui/releases/tag/v${appVersion}`).catch((e) => console.error(e)); }} class="absolute right-0 bottom-0 text-white hover:underline">{`v${appVersion}`}</button>
 			</main>
 		</AppContext.Provider>
 	);

@@ -1,0 +1,2 @@
+# cmd.exe mis-parses labels in LF-only batch files, so keep them CRLF in the working tree.
+*.bat text eol=crlf
