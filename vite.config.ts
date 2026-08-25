@@ -31,7 +31,8 @@ export default defineConfig(async () => ({
     },
     root: "src",
     build: {
-        outDir: '../dist',
+        // `dist/` is reserved for the packaged Windows installers produced by build_win10.bat.
+        outDir: '../dist-web',
         emptyOutDir: true,
     },
     plugins: [

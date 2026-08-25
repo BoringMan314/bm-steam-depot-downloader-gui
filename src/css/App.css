@@ -8,6 +8,11 @@
     font-stretch: expanded;
 }
 
+/* Hubot Sans has no CJK glyphs, so Traditional Chinese needs an explicit fallback. */
+body {
+    font-family: 'Hubot Sans', 'Microsoft JhengHei UI', 'Microsoft JhengHei', 'Noto Sans TC', 'PingFang TC', sans-serif;
+}
+
 /* Disable + and - buttons for number input */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

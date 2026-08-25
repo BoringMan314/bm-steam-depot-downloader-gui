@@ -54,7 +54,7 @@ function App() {
 							<ClipBoardParserButton disabled={downloading[0]!}/>
 						</div>
 						<div class="mb-1 text-4xl font-bold text-center font-['Hubot_Sans']">
-							Steam Depot Downloader
+							Steam Depot 下載器
 						</div>
 					</div>
 					<div class="flex gap-5 justify-between max-h-screen">

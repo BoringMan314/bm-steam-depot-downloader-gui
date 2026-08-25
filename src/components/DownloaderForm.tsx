@@ -13,22 +13,22 @@ export function DownloaderForm() {
 		<>
 			<form class="mb-1">
 				<div class="flex flex-col gap-0.5 mb-8">
-					<TextInput id="username" label="Username" valueState={context.username} placeholder="Leave empty for anonymous download" disabled={context.downloading![0]} />
-					<TextInput id="password" label="Password" valueState={context.password} placeholder="Leave empty for anonymous download" disabled={context.downloading![0]} password={true} />					
+					<TextInput id="username" label="使用者名稱" valueState={context.username} placeholder="留空則以匿名方式下載" disabled={context.downloading![0]} />
+					<TextInput id="password" label="密碼" valueState={context.password} placeholder="留空則以匿名方式下載" disabled={context.downloading![0]} password={true} />					
 					<div class="h-5" />
-					<NumberInput id="appId" label="App ID" valueState={context.appId} required={true} disabled={context.downloading![0]} />
-					<NumberInput id="depotId" label="Depot ID" valueState={context.depotId} required={true} disabled={context.downloading![0]} />
-					<NumberInput id="manifestId" label="Manifest ID" valueState={context.manifestId} required={true} disabled={context.downloading![0]} />
+					<NumberInput id="appId" label="App ID（遊戲編號）" valueState={context.appId} required={true} disabled={context.downloading![0]} />
+					<NumberInput id="depotId" label="Depot ID（倉庫編號）" valueState={context.depotId} required={true} disabled={context.downloading![0]} />
+					<NumberInput id="manifestId" label="Manifest ID（版本編號）" valueState={context.manifestId} required={true} disabled={context.downloading![0]} />
 					<div class="h-1" />
-					<FileInput required={true} pathState={context.outputLocation!} disabled={context.downloading![0]} label="Output directory" />
+					<FileInput required={true} pathState={context.outputLocation!} disabled={context.downloading![0]} label="輸出資料夾" />
 				</div>
 				<DownloadButton disabled={context.downloading![0]} downloadingState={context.downloading!} />
 			</form>
 			<div class="flex gap-1 justify-between">
 				<InternetButton icon={"ic:sharp-discord"} title="Discord" href="https://discord.com/invite/3qCt4DT5qe" />
 				<InternetButton icon={"simple-icons:steamdb"} title="SteamDB" href="https://steamdb.info/instantsearch" />
-				<InternetButton icon={"mdi:youtube"} title="Tutorials" href="https://youtube.com/playlist?list=PLRAjc5plLScj967hnsYX-I3Vjw9C1v7Ca"/>
-				<InternetButton icon={"bx:donate-heart"} title="Donate" href="https://paypal.me/onderkin"/>
+				<InternetButton icon={"mdi:youtube"} title="使用教學" href="https://youtube.com/playlist?list=PLRAjc5plLScj967hnsYX-I3Vjw9C1v7Ca"/>
+				<InternetButton icon={"bx:donate-heart"} title="贊助作者" href="https://paypal.me/onderkin"/>
 			</div>
 		</>
 	);
@@ -77,13 +77,13 @@ function DownloadButton(
 						<div class="flex absolute ml-2">
 							<Icon icon="line-md:downloading-loop" width="35" height="35" />
 						</div>
-						<span class="w-full">Downloading...</span>
+						<span class="w-full">下載中…</span>
 					</> :
 					<>
 						<div class="flex absolute ml-2">
 							<Icon icon="material-symbols:downloading-rounded" width="35" height="35" />
 						</div>
-						<span class="w-full">Download</span>
+						<span class="w-full">開始下載</span>
 					</>
 				}
 			</button>

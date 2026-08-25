@@ -6,13 +6,13 @@
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "pnpm build",
-    "frontendDist": "../dist"
+    "frontendDist": "../dist-web"
   },
   "app": {
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "SteamDepotDownloaderGUI",
+        "title": "Steam Depot 下載器",
         "width": 900,
         "height": 720,
         "resizable": false,
@@ -26,12 +26,23 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "shortDescription": "Steam Depot 下載器",
+    "longDescription": "透過 DepotDownloader 輕鬆下載 Steam 遊戲的舊版本。",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "windows": {
+      "nsis": {
+        "languages": ["TradChinese"],
+        "displayLanguageSelector": false
+      },
+      "wix": {
+        "language": ["zh-TW"]
+      }
+    }
   }
 }

@@ -28,10 +28,10 @@ export function DownloaderOutput() {
 		<div class="mx-auto mt-2 w-full h-full">
 			<div class="text-white bg-gray-900 rounded-md border border-gray-300 shadow shadow-blue-200">
 				<div class="inline-flex items-center my-px w-full font-semibold text-md">
-					<span class="w-full text-center">Download output</span>
+					<span class="w-full text-center">下載輸出訊息</span>
 					{terminal &&
-						<button onClick={() => { if (!downloading) terminal.reset(); }} type="button" disabled={downloading ?? false} class="py-px px-2 my-0.5 mr-1.5 ml-auto font-normal border-2 disabled:text-gray-300 disabled:line-through disabled:cursor-not-allowed rounded-xs border-red-500/75 enabled:hover:bg-red-200/30 enabled:active:bg-red-200/50">
-							Clear
+						<button onClick={() => { if (!downloading) terminal.reset(); }} type="button" disabled={downloading ?? false} class="py-px px-2 my-0.5 mr-1.5 ml-auto font-normal whitespace-nowrap border-2 disabled:text-gray-300 disabled:line-through disabled:cursor-not-allowed rounded-xs border-red-500/75 enabled:hover:bg-red-200/30 enabled:active:bg-red-200/50">
+							清除
 						</button>
 					}
 					

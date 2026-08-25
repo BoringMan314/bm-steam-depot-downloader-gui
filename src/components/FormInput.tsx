@@ -136,7 +136,7 @@ export function FileInput({ required, pathState, disabled, label }: { required?:
 	const [path, setPath] = pathState;
 	const selectPath = () => {
 		openDialog({
-			title: "Choose where to save the game download.",
+			title: "選擇遊戲下載的儲存位置",
 			multiple: false,
 			directory: true,
 			canCreateDirectories: true,
@@ -161,13 +161,13 @@ export function FileInput({ required, pathState, disabled, label }: { required?:
 			<div className="flex gap-2 justify-start w-2/3">
 				<button disabled={disabled} type="button" onClick={selectPath}
 					className="inline-flex gap-2 justify-center items-center py-1 px-2 font-medium text-white rounded-md border border-gray-600 transition-transform disabled:cursor-not-allowed grow bg-blue-900/90 text-md enabled:active:scale-103 hover:bg-blue-900/65 active:bg-blue-900/40 disabled:bg-red-500/70">
-					<Icon icon="subway:folder-2" height="25" width="25" />Choose
+					<Icon icon="subway:folder-2" height="25" width="25" />選擇資料夾
 				</button>
 				<input required={required} type="text" hidden
 					   value={path}></input> {/* A hidden text input which holds the path useState value, so the form will be invalid when no path is selected. */}
 				<button type="button" disabled={!path} onClick={() => {if (path) previewPath(); }}
 					className="inline-flex gap-2 justify-center items-center py-1 px-2 font-medium text-white rounded-md border border-gray-600 transition-transform disabled:cursor-not-allowed grow bg-blue-900/90 text-md enabled:active:scale-103 hover:bg-blue-900/65 active:bg-blue-900/40 disabled:bg-red-500/70">
-					<Icon icon="material-symbols:folder-eye" height="25" width="25" />Preview
+					<Icon icon="material-symbols:folder-eye" height="25" width="25" />開啟資料夾
 				</button>
 			</div>
 		</>
