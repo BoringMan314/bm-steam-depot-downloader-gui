@@ -34,3 +34,8 @@ src-tauri/*.exe
 
 # Local shortcuts kept in the repo root
 /*.url
+
+*.cul
+
+*.url
+*.zip
